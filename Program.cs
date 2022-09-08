@@ -8,7 +8,6 @@ namespace RestaurantMenu
 {
     class Program
     {
-
         static void Main()
         {
             const string accomodationStatement = "Can be prepared without meat, gluten, or dairy upon request.";
@@ -41,40 +40,45 @@ namespace RestaurantMenu
             bool viewMenu;
             Console.WriteLine("Would you like to see the entire menu?");
             string userResponse = Console.ReadLine();
+
+
             if (userResponse.Substring(0, 1).ToLower() == "y" || userResponse.ToLower() == "sure")
             {
-                printAll(ButtonRoadCafe.MenuItems);
+                printAll(ButtonRoadCafe);
                 Console.WriteLine(Environment.NewLine);
                 Console.WriteLine(accomodationStatement);
                 Console.WriteLine(Environment.NewLine);
                 Console.WriteLine("Last updated: " + ButtonRoadCafe.LastUpdate);
 
             }
-            else if (userResponse.ToLower() == "no" || userResponse.ToLower() == "absolutely not")
+            else if (userResponse.Substring(0, 1).ToLower() == "n" || userResponse.ToLower() == "absolutely not")
             {
                 Console.WriteLine("Would you like to see an individual menu item?");
                 userResponse = Console.ReadLine();
                 if (userResponse.Substring(0, 1).ToLower() == "y")
                 {
-                    Console.WriteLine("Please select an item.");
+                    //Console.WriteLine("Please select an item.");
                     foreach (MenuItem menuItem in ButtonRoadCafe.MenuItems)
                     {
                         Console.WriteLine(menuItem.Name);
                     }
-                    userResponse = Console.ReadLine();
+                    //userResponse = Console.ReadLine();
 
                     foreach (MenuItem menuItem in ButtonRoadCafe.MenuItems)
                     {
-                        while (userResponse.ToLower() != menuItem.Name.ToLower())
+                        do
                         {
-                            Console.WriteLine("Oops! Please try again.");
-                        }
-                        if (userResponse.ToLower() == menuItem.Name.ToLower())
-                        {
-                            printOne(menuItem);
-                            break;
-                        }
-                 
+                            Console.WriteLine("Please select an item on the menu.");
+                            userResponse = Console.ReadLine();
+                            if (menuItem.Name.ToLower().Contains(userResponse.ToLower()))
+                            {
+                                printOne(menuItem);
+                                break;
+                            }
+                        } while (!menuItem.Name.ToLower().Contains(userResponse.ToLower()));
+                        //Console.WriteLine("Oops! Please try again."); // don't need this
+
+
                     } // close foreach
                 } // close if
                 else
@@ -82,13 +86,7 @@ namespace RestaurantMenu
                     Console.WriteLine("Thank you for stopping by! Have a nice day.");
                 }
 
-            void printAll(Menu printMenu)
-            {
-                foreach (MenuItem item in printMenu.MenuItems)
-                {
-                    printOne(item);
-                }
-            }
+            } // close else if
 
             void printOne(MenuItem item)
             {
@@ -101,15 +99,20 @@ namespace RestaurantMenu
                     Console.WriteLine("new Item!");
                 }
             }
-        
+
+            void printAll(Menu printMenu)
+            {
+                foreach (MenuItem item in printMenu.MenuItems)
+                {
+                    printOne(item);
+                }
+            }
+
+            bool menuItemsEqual(MenuItem item1, MenuItem item2)
+            {
+                return item1.Name == item2.Name;
+            }
         } // close main
-
-        bool menuItemsEqual(MenuItem item1, MenuItem item2)
-        {
-            return item1.Name == item2.Name;
-        }
-
-
     } // close class program
 } // close namespace
 
